@@ -114,7 +114,7 @@ jobs:
         if [ ${{ env.USE_CUSTOM_GCC_64 }} = true ]; then
           if [[ ${{ env.CUSTOM_GCC_64_SOURCE }} =~ git ]]; then
               if [[ ${{ env.CUSTOM_GCC_64_SOURCE }} == *'.tar.gz' ]]; then
-                wget -O gcc-64.tar.gz ${{ env.CUSTOM_CLANG_SOURCE }}
+                wget -O gcc-64.tar.gz ${{ env.CUSTOM_GCC_64_SOURCE }}
                 mkdir gcc-64
                 tar -C gcc-64/ -zxvf gcc-64.tar.gz
               else
@@ -131,7 +131,7 @@ jobs:
         if [ ${{ env.USE_CUSTOM_GCC_32 }} = true ]; then
           if [[ ${{ env.CUSTOM_GCC_32_SOURCE }} =~ git ]]; then
               if [[ ${{ env.CUSTOM_GCC_32_SOURCE }} == *'.tar.gz' ]]; then
-                wget -O gcc-32.tar.gz ${{ env.CUSTOM_CLANG_SOURCE }}
+                wget -O gcc-32.tar.gz ${{ env.CUSTOM_GCC_32_SOURCE }}
                 mkdir gcc-32
                 tar -C gcc-32/ -zxvf gcc-32.tar.gz
               else
@@ -148,7 +148,7 @@ jobs:
     - name: Download kernel source
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace
-        git clone ${{ env.KERNEL_SOURCE }} -b ${{ env.KERNEL_SOURCE_BRANCH }} android-kernel --depth=1
+        git clone --recursive ${{ env.KERNEL_SOURCE }} -b ${{ env.KERNEL_SOURCE_BRANCH }} android-kernel --depth=1
         if [[ ${{ env.ADD_LOCALVERSION_TO_FILENAME }} == 'true' ]]; then
           echo "LOCALVERSION=$(cat android-kernel/localversion)" >> $GITHUB_ENV
         else
